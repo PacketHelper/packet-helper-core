@@ -1,0 +1,10 @@
+.idea/*
+.vscode/*
+
+*.pcap
+**/*/*.pcap
+
+*.pyc
+**/*/*.pyc
+
+venv
