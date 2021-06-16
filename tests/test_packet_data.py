@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from src.packet_data import PacketData
-from tests.example_packets import EXAMPLE_ETHER
+from tests.utils.example_packets import EXAMPLE_ETHER
 
 
 class TestPacketData(TestCase):
