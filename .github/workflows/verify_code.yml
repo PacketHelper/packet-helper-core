@@ -1,0 +1,15 @@
+  
+name: Verify code
+on: [push]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          pip install black
+      - name: Verify code
+        run: |
+          black --check -t py38 .
