@@ -68,10 +68,9 @@ def better_scapy_summary(scapy_summary) -> list:
 
 
 def hex_diff(first_hex: str, second_hex: str) -> list:
-    sep_bytes = lambda hex_str: " ".join([
-                "".join([hex_str[e - 1], hex_str[e]])
-                for e in range(len(hex_str))
-                if e % 2
-            ])
+    sep_bytes = lambda hex_str: " ".join(
+        ["".join([hex_str[e - 1], hex_str[e]]) for e in range(len(hex_str)) if e % 2]
+    )
 
     return diff(sep_bytes(first_hex), sep_bytes(second_hex))
+
