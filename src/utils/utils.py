@@ -73,4 +73,3 @@ def hex_diff(first_hex: str, second_hex: str) -> list:
     )
 
     return diff(sep_bytes(first_hex), sep_bytes(second_hex))
-

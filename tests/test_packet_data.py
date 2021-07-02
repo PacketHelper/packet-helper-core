@@ -8,4 +8,3 @@ class TestPacketData(TestCase):
     def test_packet_data(self):
         pd = PacketData(raw=EXAMPLE_ETHER)
         assert pd
-
