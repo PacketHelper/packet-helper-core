@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          pip install black
-      - name: Verify code
+          pip install -r requirements.txt
+      - name: Run pytest
         run: |
-          black --check -t py38 .
+          pytest

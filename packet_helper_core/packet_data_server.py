@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from scapy_helper import get_hex
 
-from src.packet_data import PacketData
-from src.utils.scapy_reader import scapy_reader
+from packet_helper_core.packet_data import PacketData
+from packet_helper_core.utils.scapy_reader import scapy_reader
 
 
 @dataclass
