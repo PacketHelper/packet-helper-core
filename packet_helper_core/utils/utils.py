@@ -1,7 +1,4 @@
-from time import time
-
 import pyshark
-from scapy.utils import wrpcap
 from scapy_helper import get_hex
 
 
