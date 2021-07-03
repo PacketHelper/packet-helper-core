@@ -25,4 +25,6 @@ class TestPacketData:
         list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
         for expected_packet in list_of_expected_packets:
             if expected_packet not in list_of_layers_from_packet:
-                raise Exception(f"Missing layer ${expected_packet} in packet. PyShark decode correctly?")
+                raise Exception(
+                    f"Missing layer ${expected_packet} in packet. PyShark decode correctly?"
+                )
