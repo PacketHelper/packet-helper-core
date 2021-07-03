@@ -1,7 +1,18 @@
+import os
+
 from setuptools import setup, find_packages
 
 with open("./README.md", "r") as fh:
     long_description = fh.read()
+
+requirements_txt = os.path.join(os.path.dirname(__file__), "requirements.txt")
+
+with open(requirements_txt, "r", encoding="utf-8") as fin:
+    requires = [
+        line.strip()
+        for line in fin
+        if line and line.strip() and not line.strip().startswith("#")
+    ]
 
 setup(
     name="packet_helper_core",
@@ -11,8 +22,8 @@ setup(
     author="Nex Sabre",
     author_email="nexsabre@protonmail.com",
     version="0.1",
-    url="https://github.com/NexSabre/scapy_helper",
-    packages=find_packages(),
+    url="https://github.com/PacketHelper/packet-helper-core",
+    packages=find_packages(exclude=("tests", )),
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
@@ -30,5 +41,5 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     license="GPLv2",
-    install_requires=[],
+    install_requires=requires,
 )
