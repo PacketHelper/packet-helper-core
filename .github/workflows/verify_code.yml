@@ -8,7 +8,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          pip install black
-      - name: Verify code
+          pip install black flake8
+      - name: Verify code (Black)
         run: |
           black --check -t py38 .
+      - name: Verify code (Flake8)
+        run: |
+          flake8 --max-line-length 89
