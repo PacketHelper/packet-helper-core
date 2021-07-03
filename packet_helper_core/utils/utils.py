@@ -1,10 +1,6 @@
-from time import time
-
 import pyshark
-from scapy.utils import wrpcap
 from scapy_helper import get_hex
 from scapy_helper import diff
-
 
 def hex_str_operation(h_string, with_new_line: bool = False):
     z = ""
