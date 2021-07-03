@@ -23,7 +23,7 @@ setup(
     author_email="nexsabre@protonmail.com",
     version="0.1",
     url="https://github.com/PacketHelper/packet-helper-core",
-    packages=find_packages(exclude=("tests", )),
+    packages=find_packages(exclude=("tests",)),
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
