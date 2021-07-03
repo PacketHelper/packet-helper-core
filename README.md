@@ -1,3 +1,6 @@
+[![Run tests](https://github.com/PacketHelper/packet-helper-core/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/PacketHelper/packet-helper-core/actions/workflows/pytest.yml)
+[![Verify code](https://github.com/PacketHelper/packet-helper-core/actions/workflows/verify_code.yml/badge.svg)](https://github.com/PacketHelper/packet-helper-core/actions/workflows/verify_code.yml)
+
 # packet-helper-core
 Core application to parse packets. 
 
