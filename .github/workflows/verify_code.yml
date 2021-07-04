@@ -14,4 +14,4 @@ jobs:
           black --check -t py38 .
       - name: Verify code (Flake8)
         run: |
-          flake8 --max-line-length 99
+          flake8 --max-line-length 99 --exclude __init__.py
