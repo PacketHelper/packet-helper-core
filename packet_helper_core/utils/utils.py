@@ -72,8 +72,14 @@ class Compare:
     @staticmethod
     def sep_bytes(hex_str: str) -> str:
         return " ".join(
-            ["".join([hex_str[e - 1], hex_str[e]]) for e in range(len(hex_str)) if e % 2]
+            [
+                "".join([hex_str[e - 1], hex_str[e]])
+                for e in range(len(hex_str))
+                if e % 2
+            ]
         )
 
     def hex_diff(self) -> list:
-        return scapy_diff(self.sep_bytes(self.first_hex), self.sep_bytes(self.second_hex))
+        return scapy_diff(
+            self.sep_bytes(self.first_hex), self.sep_bytes(self.second_hex)
+        )
