@@ -1,6 +1,7 @@
 import pyshark
 from scapy_helper import get_hex
 from scapy_helper import diff as scapy_diff
+from dataclasses import dataclass
 
 
 def hex_str_operation(h_string, with_new_line: bool = False):
@@ -64,10 +65,10 @@ def better_scapy_summary(scapy_summary) -> list:
     return list_
 
 
+@dataclass
 class Compare:
-    def __init__(self, first_hex: str, second_hex: str):
-        self.first_hex = first_hex
-        self.second_hex = second_hex
+    first_hex: str
+    second_hex: str
 
     @staticmethod
     def sep_bytes(hex_str: str) -> str:
