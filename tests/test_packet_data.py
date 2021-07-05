@@ -29,11 +29,12 @@ class TestPacketData:
                 raise Exception(
                     f"Missing layer ${expected_packet} in packet. PyShark decode correctly?"
                 )
+
     def test_tcp_packet(self):
         size = 300
         pkt = simple_tcp_packet(pktlen=size)
         assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
-    
+
     def test_ip_packet(self):
         size = 300
         pkt = simple_ip_packet(pktlen=size)
@@ -42,10 +43,9 @@ class TestPacketData:
     def test_udp_packet(self):
         size = 300
         pkt = simple_udp_packet(pktlen=size)
-        assert len(bytes(pkt)) == size, "Packet length should be " + str(size)        
-    
+        assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
+
     def test_eth_packet(self):
         size = 300
         pkt = simple_eth_packet(pktlen=size)
         assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
-    
