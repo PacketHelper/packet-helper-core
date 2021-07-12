@@ -6,7 +6,12 @@ from scapy_helper import get_hex
 from packet_helper_core.packet_data import PacketData
 from packet_helper_core.utils.utils import decode_hex
 from tests.utils.example_packets import EXAMPLE_ETHER
-from ptf.testutils import *
+from ptf.testutils import (
+    simple_tcp_packet,
+    simple_ip_packet,
+    simple_udp_packet,
+    simple_eth_packet,
+)
 
 
 class TestPacketData:
@@ -31,21 +36,63 @@ class TestPacketData:
                 )
 
     def test_tcp_packet(self):
-        size = 300
-        pkt = simple_tcp_packet(pktlen=size)
-        assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
+        dport = 81
+        pkt = simple_tcp_packet(tcp_dport=dport)
+        packet = decode_hex(get_hex(pkt))
+        list_of_expected_packets = ("ETH", "IP", "TCP")
+        list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
+        for expected_packet in list_of_expected_packets:
+            if expected_packet not in list_of_layers_from_packet:
+                raise Exception(
+                    f"Missing layer ${expected_packet} in packet. PyShark decode correctly?"
+                )
+        if packet.tcp.dstport != str(dport):
+            raise Exception(
+                f"TCP destination port mismatch. Is {packet.tcp.dstport}, should be {dport}."
+            )
 
     def test_ip_packet(self):
-        size = 300
-        pkt = simple_ip_packet(pktlen=size)
-        assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
+        ttl = 32
+        pkt = simple_ip_packet(ip_ttl=ttl)
+        packet = decode_hex(get_hex(pkt))
+        list_of_expected_packets = ("ETH", "IP")
+        list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
+        for expected_packet in list_of_expected_packets:
+            if expected_packet not in list_of_layers_from_packet:
+                raise Exception(
+                    f"Missing layer ${expected_packet} in packet. PyShark decode correctly?"
+                )
+        if packet.ip.ttl != str(ttl):
+            raise Exception(f"IP ttl mismatch. Is {packet.ip.ttl}, should be {ttl}.")
 
     def test_udp_packet(self):
-        size = 300
-        pkt = simple_udp_packet(pktlen=size)
-        assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
+        dport = 81
+        pkt = simple_udp_packet(udp_dport=dport)
+        packet = decode_hex(get_hex(pkt))
+        list_of_expected_packets = ("ETH", "IP", "UDP")
+        list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
+        for expected_packet in list_of_expected_packets:
+            if expected_packet not in list_of_layers_from_packet:
+                raise Exception(
+                    f"Missing layer ${expected_packet} in packet. PyShark decode correctly?"
+                )
+        if packet.udp.dstport != str(dport):
+            raise Exception(
+                f"UDP destination port mismatch. Is {packet.udp.dstport}, should be {dport}."
+            )
 
     def test_eth_packet(self):
-        size = 300
-        pkt = simple_eth_packet(pktlen=size)
-        assert len(bytes(pkt)) == size, "Packet length should be " + str(size)
+        dst = "01:02:03:04:05:06"
+        pkt = simple_eth_packet(eth_dst="01:02:03:04:05:06")
+        packet = decode_hex(get_hex(pkt))
+        list_of_expected_packets = ("ETH", "LLDP")
+        list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
+        for expected_packet in list_of_expected_packets:
+            if expected_packet not in list_of_layers_from_packet:
+                raise Exception(
+                    f"Missing layer ${expected_packet} in packet. PyShark decode correctly?"
+                )
+        if packet.eth.dst != dst:
+            raise Exception(
+                f"ETH destination mismatch. Is {packet.eth.dst}, should be {dst}."
+            )
