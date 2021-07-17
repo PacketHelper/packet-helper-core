@@ -9,6 +9,7 @@ class PacketData:
     chksum_list = []
 
     def __post_init__(self):
+        self.chksum_list = []
         self.raw_array = self.raw.split("\n")
         self.length = self.raw_array[0].replace(")", "").split()[2]
         self.array = self.raw_array[1:]
@@ -16,6 +17,9 @@ class PacketData:
         self.header = self.compose_header()
         self.body = self.compose_body()
         self.body2 = self.compose_body_list()
+
+        print(len(self.chksum_list))
+        print(self.chksum_list)
 
     def compose_header(self):
         return [
