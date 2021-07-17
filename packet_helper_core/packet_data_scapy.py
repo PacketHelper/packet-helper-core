@@ -24,10 +24,13 @@ class PacketDataScapy:
         temp_structure = []
 
         for e, h in enumerate(self.headers_scapy):
+            one_frame = self.headers_scapy[e].copy()
+            one_frame.remove_payload()
             _dict = {
                 "name": h.name,
                 "bytes": str(h),
                 "hex": get_hex(h),
+                "hex_one": get_hex(one_frame),
                 "length": len(h),
                 "length_unit": "B",
                 "repr": f"{repr(h).split(' |')[0]}>",
