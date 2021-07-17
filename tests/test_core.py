@@ -35,4 +35,8 @@ class TestCore:
 
     def test_negative_core_chksum_verification_with_wrong_chksum(self):
         core_results = Core(get_hex(Ether() / IP() / IP(chksum=0) / TCP()))
-        assert core_results.tshark_data.chksum_list
+        assert core_results.tshark_data.chksum_list[2]["chksum"] == "0x0000"
+
+    def test_case(self):
+        core_results = Core("ffffffaaa9ff00000000001208004500003c0001000040047cbb7f0000017f000001450000280001000040067ccd7f0000017f00000100140050000000000000000050022000917d0000")
+        assert core_results.tshark_data.chksum_list[3]["chksum"] == "0x917d"

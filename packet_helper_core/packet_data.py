@@ -65,11 +65,14 @@ class PacketData:
         chksum_status = ChecksumStatus()
         for x in element:
             x = x.lower()
-            if "bad checksum" in x:
-                continue
-            if "checksum" in x and "status" not in x:
+            if "header checksum" in x and "incorrect" in x:
                 chksum_status.chksum = x.split(":")[1].split()[0]
-            if "calculated checksum" in x:
+                continue
+            if "bad checksum" in x and not chksum_status.chksum:
+                continue
+            if "checksum" in x and "status" not in x and not chksum_status.chksum:
+                chksum_status.chksum = x.split(":")[1].split()[0]
+            if "calculated checksum" in x :
                 chksum_status.chksum_calculated = x.split(":")[1].split()[0]
         else:
             chksum_status()
