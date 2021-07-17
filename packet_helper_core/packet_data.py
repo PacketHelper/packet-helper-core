@@ -1,9 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+
+from packet_helper_core.checksum_status import ChecksumStatus
 
 
 @dataclass
 class PacketData:
     raw: str
+    chksum_list = []
 
     def __post_init__(self):
         self.raw_array = self.raw.split("\n")
@@ -35,6 +38,7 @@ class PacketData:
     def compose_body_list(self):
         temp_body_dict = []
         line = []
+        ckhsum_flag = False
         for arr in self.array:
             arr = arr.strip()
             if arr == "" and line:
@@ -49,4 +53,22 @@ class PacketData:
                 line.append(actual_layer)
                 continue
             line.append(arr)
+            if "checksum" in arr:
+                ckhsum_flag = True
+
+        if ckhsum_flag:
+            for y in temp_body_dict:
+                self.chksum_verification(y, y[0])
         return temp_body_dict
+
+    def chksum_verification(self, element, actual_layer):
+        chksum_status = ChecksumStatus()
+        for x in element:
+            x = x.lower()
+            if "checksum" in x and "status" not in x:
+                chksum_status.chksum = x.split(":")[1].split()[0]
+            if "calculated checksum" in x:
+                chksum_status.chksum_calculated = x.split(":")[1].split()[0]
+        else:
+            chksum_status()
+            self.chksum_list.append(asdict(chksum_status))
