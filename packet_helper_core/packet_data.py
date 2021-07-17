@@ -18,9 +18,6 @@ class PacketData:
         self.body = self.compose_body()
         self.body2 = self.compose_body_list()
 
-        print(len(self.chksum_list))
-        print(self.chksum_list)
-
     def compose_header(self):
         return [
             a.replace("Layer", "").replace(":", "").replace(" ", "")
