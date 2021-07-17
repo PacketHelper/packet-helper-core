@@ -32,3 +32,4 @@ class TestCore:
     def test_core_chksum_verification(self):
         core_results = Core(get_hex(Ether() / IP() / IP() / TCP()))
         assert core_results.tshark_data.chksum_list
+
