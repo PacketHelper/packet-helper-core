@@ -1,5 +1,3 @@
-from time import sleep
-
 from scapy.layers.inet import IP, TCP
 from scapy.layers.l2 import Ether
 from scapy_helper import get_hex
@@ -39,10 +37,24 @@ class TestCore:
         core_results2 = Core(get_hex(Ether() / IP() / IP(chksum=0) / TCP()))
         assert core_results2.tshark_data.chksum_list[2]["chksum"] == "0x0000"
 
-    def test_case(self):
-        core_results1 = Core(
+    def test_one_of_custom_problematic_cases(self):
+        core_results = Core(
             "ffffffaaa9ff00000000001208004500003c0001000040047cbb7f0000017f"
             "000001450000280001000040067ccd7f0000017f0000010014005000000000"
             "0000000050022000917d0000"
         )
-        assert core_results1.tshark_data.chksum_list[3]["chksum"] == "0x917d"
+        assert core_results.tshark_data.chksum_list[3]["chksum"] == "0x917d"
+
+    def test_Ethernet_IP_UDP_DNS(self):
+        core_result = Core(
+            "00E01CCCCCC2001F33D9736108004500008000004000401124550A0A01010"
+            "A0A01040035DB66006C2D2E795681800001000200020000046D61696C0870"
+            "617472696F747302696E0000010001C00C0005000100002A4B0002C011C01"
+            "10001000100002A4C00044A358C99C011000200010001438C0006036E7332"
+            "C011C011000200010001438C0006036E7331C011"
+        )
+        chksum_obj = core_result.tshark_data.chksum_list[2]
+
+        assert chksum_obj["chksum"] == "0x2d2e"
+        assert chksum_obj["chksum_calculated"] == "0x2d2d"
+        assert chksum_obj["status"] is False
