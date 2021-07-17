@@ -40,6 +40,8 @@ class PacketDataScapy:
                 _dict["tshark_raw_summary"] = self.packet_data.body2[e][1:]
             except IndexError:
                 break
+                
+            _dict["chksum_status"] = self.packet_data.chksum_list[e]
 
             temp_structure.append(_dict)
         return temp_structure
