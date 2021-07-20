@@ -83,7 +83,7 @@ class TestPacketData:
 
     def test_eth_packet(self):
         dst = "01:02:03:04:05:06"
-        pkt = simple_eth_packet(eth_dst="01:02:03:04:05:06")
+        pkt = simple_eth_packet(eth_dst=dst)
         packet = decode_hex(get_hex(pkt))
         list_of_expected_packets = ("ETH", "LLDP")
         list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
