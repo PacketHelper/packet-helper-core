@@ -7,10 +7,10 @@ clean:
 
 format:
 	@echo "Formatting..."
-	python -m black -t py38 .
+	python3 -m black -t py38 .
 	@echo "Formatting... Done"
 
 build:
 	@echo "Building..."
-	python setup.py sdist bdist_wheel --universal
+	python3 setup.py sdist bdist_wheel --universal
 	@echo "Building... Done"
