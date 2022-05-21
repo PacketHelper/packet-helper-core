@@ -14,7 +14,7 @@ class Core:
 
     hex_string: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.hex_string = self.hex_string.replace(" ", "")
         self.tshark_data = PacketData(str(decode_hex(self.hex_string)))
         self.scapy_data = PacketDataScapy(self.hex_string, self.tshark_data)
