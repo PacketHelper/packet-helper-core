@@ -1,13 +1,14 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
 class ChecksumStatus:
     chksum: str = ""
     chksum_calculated: str = ""
-    status: bool = None
+    status: Optional[bool] = None
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> None:
         def clean_chksum(element: str):
             return element.replace("0x", "")
 
