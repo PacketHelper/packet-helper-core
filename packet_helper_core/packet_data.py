@@ -56,7 +56,9 @@ class PacketData:
         temp_body_dict = []
         line = []
         ckhsum_flag = False
-        data_found: list[str] = ["RAW", ]
+        data_found: list[str] = [
+            "RAW",
+        ]
         for arr in self.array:
             arr = arr.strip()
             if arr == "" and line:
