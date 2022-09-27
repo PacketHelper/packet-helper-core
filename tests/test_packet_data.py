@@ -1,11 +1,11 @@
-from scapy.layers.inet import IP, TCP
-from scapy.layers.inet6 import IPv6
-from scapy.layers.l2 import Ether
+from scapy.layers.all import IP, TCP, IPv6, Ether
+# from scapy.layers.inet6 import IPv6
+# from scapy.layers.l2 import Ether
 from scapy_helper import get_hex
 
 from packet_helper_core.packet_data import PacketData
 from packet_helper_core.utils.utils import decode_hex
-from tests.utils.example_packets import EXAMPLE_ETHER
+from tests.utils.example_packets import EXAMPLE_ETHER, EXAMPLE_ETHER_IP_IPV6_GRE_DATA
 
 
 class TestPacketData:
@@ -17,6 +17,11 @@ class TestPacketData:
 
         pd = PacketData(raw=str(packet))
         assert "ETH" in pd.header, "Ether header should be found at packet"
+
+    def test_decode_hex__data_should_be_present_after_gre_packet(self):
+        packet = decode_hex(EXAMPLE_ETHER_IP_IPV6_GRE_DATA)
+        pd = PacketData(raw=str(packet))
+        print(pd)
 
     def test_custom_packet_data(self):
         frame = Ether() / IP() / IPv6() / TCP()
