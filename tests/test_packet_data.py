@@ -1,7 +1,4 @@
-from scapy.layers.all import IP, TCP, IPv6, Ether
-
-# from scapy.layers.inet6 import IPv6
-# from scapy.layers.l2 import Ether
+from scapy.layers.all import IP, TCP, IPv6, Ether  # noqa
 from scapy_helper import get_hex
 
 from packet_helper_core.packet_data import PacketData

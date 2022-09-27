@@ -1,5 +1,4 @@
-from scapy.layers.inet import IP, TCP
-from scapy.layers.l2 import Ether
+from scapy.all import IP, TCP, Ether  # noqa
 from scapy_helper import to_list, get_hex
 
 from packet_helper_core.utils.conversion import from_sh_list
