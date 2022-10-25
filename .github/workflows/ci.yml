@@ -1,0 +1,48 @@
+name: CI
+on: [push]
+
+jobs:
+  verify-test:
+    name: Run Pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python dependencies (pip)
+        run: |
+          pip install -r requirements-dev.txt
+      - name: Install Wireshark & tshark  (apt)
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt-get update
+          sudo apt-get -y install wireshark
+          sudo apt-get install -y --allow-change-held-packages --force-yes tshark
+      - name: Run pytest
+        run: |
+          pytest
+  verify-code:
+    name: Verify code w/Black&Flake8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          pip install black flake8
+      - name: Verify code (Black)
+        run: |
+          black --check -t py311 .
+      - name: Verify code (Flake8)
+        run: |
+          flake8 --max-line-length 99 --exclude __init__.py
+  release:
+    name: GitHub release
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [verify-code, verify-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        run: npm install --save-dev semantic-release
+      - name: Release new version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
