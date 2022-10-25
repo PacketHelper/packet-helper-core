@@ -1,0 +1,8 @@
+{
+  "name": "packet-helper-core",
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}
