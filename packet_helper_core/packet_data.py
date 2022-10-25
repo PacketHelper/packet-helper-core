@@ -1,5 +1,4 @@
-from dataclasses import asdict, dataclass, field
-from typing import Any
+from dataclasses import dataclass, field
 
 from packet_helper_core.checksum_status import ChecksumStatus
 
@@ -7,7 +6,7 @@ from packet_helper_core.checksum_status import ChecksumStatus
 @dataclass
 class PacketData:
     raw: str
-    chksum_list: list[dict[str, Any]] = field(default_factory=list)
+    chksum_list: list[ChecksumStatus] = field(default_factory=list)
 
     def __post_init__(self):
         self.raw_array = self.raw.split("\n")
@@ -63,7 +62,7 @@ class PacketData:
         return temp_body_dict
 
     def chksum_verification(self, element):
-        chksum_status = ChecksumStatus()
+        chksum_status: ChecksumStatus = ChecksumStatus()
         for x in element:
             x = x.lower()
             if "header checksum" in x and "incorrect" in x:
@@ -76,5 +75,5 @@ class PacketData:
             if "calculated checksum" in x:
                 chksum_status.chksum_calculated = x.split(":")[1].split()[0]
         else:
-            chksum_status()
-            self.chksum_list.append(asdict(chksum_status))
+            chksum_status.verify()
+            self.chksum_list.append(chksum_status)

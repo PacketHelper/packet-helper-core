@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 from typing import Literal
-
+from pydantic import BaseModel
 from scapy_helper import get_hex
 
+from packet_helper_core.checksum_status import ChecksumStatus
 from packet_helper_core.packet_data import PacketData
 from packet_helper_core.utils.scapy_reader import scapy_reader
 
 
-@dataclass
-class ScapyData:
+class ScapyData(BaseModel):
     name: str
     bytes_record: str  # bytes
     hex_record: str  # hex
@@ -17,12 +17,11 @@ class ScapyData:
     length_unit: Literal[
         "B",
     ]  # length_unit
-    represantation: str  # repr
-    represantation_full: str  # repr_full
-
-    tshark_name: str | None
-    tshark_raw_summary: str | None
-    chksum_status: bool | None
+    representation: str  # repr
+    representation_full: str  # repr_full
+    tshark_name: str = ""
+    tshark_raw_summary: str = ""
+    chksum_status: ChecksumStatus | None = None
 
 
 @dataclass
@@ -40,21 +39,23 @@ class PacketDataScapy:
         self.structure = self.__make_structure()
 
     def __make_structure(self):
-        temp_structure = []
+        temp_structure: list[ScapyData] = []
 
         for index, header in enumerate(self.headers_scapy):
             scapy_header = self.headers_scapy[index].copy()
             scapy_header.remove_payload()
-            scapy_data_dict: ScapyData = ScapyData(**{
-                "name": header.name,
-                "bytes": str(header),
-                "hex": get_hex(header),
-                "hex_one": get_hex(scapy_header),
-                "length": len(header),
-                "length_unit": "B",
-                "repr": f"{repr(header).split(' |')[0]}>",
-                "repr_full": repr(header),
-            })
+            scapy_data_dict: ScapyData = ScapyData(
+                **{
+                    "name": header.name,
+                    "bytes_record": str(header),
+                    "hex_record": get_hex(header),
+                    "hex_record_full": get_hex(scapy_header),
+                    "length": len(header),
+                    "length_unit": "B",
+                    "representation": f"{repr(header).split(' |')[0]}>",
+                    "representation_full": repr(header),
+                }
+            )
 
             # RAW elements on the end are added to the last package as data!
             try:

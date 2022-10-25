@@ -1,6 +1,5 @@
-from scapy.layers.inet import IP, TCP
-from scapy.layers.inet6 import IPv6
-from scapy.layers.l2 import Ether
+from scapy.all import Ether, IP, IPv6, TCP  # noqa
+
 from scapy_helper import get_hex
 
 from packet_helper_core.packet_data import PacketData
@@ -11,6 +10,7 @@ from tests.utils.example_packets import EXAMPLE_ETHER
 class TestPacketData:
     def test_packet_data(self):
         packet = decode_hex(EXAMPLE_ETHER)
+        assert packet, "Packet should be decoded"
         assert packet.__getitem__(
             "eth"
         ), "Layer Ether should be available in decoded hex"
@@ -21,6 +21,8 @@ class TestPacketData:
     def test_custom_packet_data(self):
         frame = Ether() / IP() / IPv6() / TCP()
         packet = decode_hex(get_hex(frame))
+        assert packet, "Packet should be decoded"
+
         list_of_expected_packets = ("ETH", "IP", "IPV6", "TCP")
         list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
         for expected_packet in list_of_expected_packets:

@@ -1,14 +1,12 @@
-from dataclasses import dataclass
-from typing import Optional
+from pydantic import BaseModel
 
 
-@dataclass
-class ChecksumStatus:
+class ChecksumStatus(BaseModel):
     chksum: str = ""
     chksum_calculated: str = ""
-    status: Optional[bool] = None
+    status: bool | None = None
 
-    def __call__(self, *args, **kwargs) -> None:
+    def verify(self) -> None:
         def clean_chksum(element: str):
             return element.replace("0x", "")
 

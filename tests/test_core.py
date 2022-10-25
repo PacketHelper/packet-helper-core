@@ -1,5 +1,4 @@
-from scapy.layers.inet import IP, TCP
-from scapy.layers.l2 import Ether
+from scapy.all import Ether, IP, TCP  # noqa
 from scapy_helper import get_hex
 
 from packet_helper_core import PacketDataScapy, PacketData
@@ -35,7 +34,7 @@ class TestCore:
 
     def test_negative_core_chksum_verification_with_wrong_chksum(self):
         core_results2 = Core(get_hex(Ether() / IP() / IP(chksum=0) / TCP()))
-        assert core_results2.tshark_data.chksum_list[2]["chksum"] == "0x0000"
+        assert core_results2.tshark_data.chksum_list[2].chksum == "0x0000"
 
     def test_one_of_custom_problematic_cases(self):
         core_results = Core(
@@ -43,7 +42,7 @@ class TestCore:
             "000001450000280001000040067ccd7f0000017f0000010014005000000000"
             "0000000050022000917d0000"
         )
-        assert core_results.tshark_data.chksum_list[3]["chksum"] == "0x917d"
+        assert core_results.tshark_data.chksum_list[3].chksum == "0x917d"
 
     def test_Ethernet_IP_UDP_DNS(self):
         core_result = Core(
@@ -55,6 +54,6 @@ class TestCore:
         )
         chksum_obj = core_result.tshark_data.chksum_list[2]
 
-        assert chksum_obj["chksum"] == "0x2d2e"
-        assert chksum_obj["chksum_calculated"] == "0x2d2d"
-        assert chksum_obj["status"] is False
+        assert chksum_obj.chksum == "0x2d2e"
+        assert chksum_obj.chksum_calculated == "0x2d2d"
+        assert chksum_obj.status is False
