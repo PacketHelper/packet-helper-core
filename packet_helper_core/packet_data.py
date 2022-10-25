@@ -1,4 +1,5 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass, field
+from typing import Any
 
 from packet_helper_core.checksum_status import ChecksumStatus
 
@@ -6,10 +7,9 @@ from packet_helper_core.checksum_status import ChecksumStatus
 @dataclass
 class PacketData:
     raw: str
-    chksum_list = []
+    chksum_list: list[dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self):
-        self.chksum_list = []
         self.raw_array = self.raw.split("\n")
         self.length = self.raw_array[0].replace(")", "").split()[2]
         self.array = self.raw_array[1:]
@@ -59,10 +59,10 @@ class PacketData:
 
         if ckhsum_flag:
             for y in temp_body_dict:
-                self.chksum_verification(y, y[0])
+                self.chksum_verification(y)
         return temp_body_dict
 
-    def chksum_verification(self, element, actual_layer):
+    def chksum_verification(self, element):
         chksum_status = ChecksumStatus()
         for x in element:
             x = x.lower()
