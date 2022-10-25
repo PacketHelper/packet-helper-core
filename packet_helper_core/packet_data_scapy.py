@@ -58,12 +58,12 @@ class PacketDataScapy:
 
             # RAW elements on the end are added to the last package as data!
             try:
-                scapy_data_dict.tshark_name = self.packet_data.body2[header][0]
-                scapy_data_dict.tshark_raw_summary = self.packet_data.body2[header][1:]
+                scapy_data_dict.tshark_name = self.packet_data.body2[index][0]
+                scapy_data_dict.tshark_raw_summary = self.packet_data.body2[index][1:]
             except IndexError:
                 break
 
-            # scapy_data_dict.chksum_status = self.packet_data.chksum_list[header]
+            scapy_data_dict.chksum_status = self.packet_data.chksum_list[index]
 
             temp_structure.append(scapy_data_dict)
         return temp_structure
