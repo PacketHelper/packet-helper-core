@@ -3,6 +3,7 @@ on: [push]
 
 jobs:
   verify-test:
+    name: Run Pytest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,6 +20,7 @@ jobs:
         run: |
           pytest
   verify-code:
+    name: Verify code w/Black&Flake8
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,12 +29,12 @@ jobs:
           pip install black flake8
       - name: Verify code (Black)
         run: |
-          black --check -t py38 .
+          black --check -t py311 .
       - name: Verify code (Flake8)
         run: |
           flake8 --max-line-length 99 --exclude __init__.py
   release:
-    name: Prepare release
+    name: GitHub release
     if: ${{ github.ref == 'refs/heads/main' }}
     needs: [verify-code, verify-test]
     runs-on: ubuntu-latest
