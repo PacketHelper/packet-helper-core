@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install
-        run: npm install --save-dev semantic-release
+        run: npm install semantic-release@17.4.4
       - name: Release new version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
