@@ -1,5 +1,5 @@
-.idea/*
-.vscode/*
+.idea/
+.vscode/
 
 *.pcap
 **/*/*.pcap
@@ -7,4 +7,6 @@
 *.pyc
 **/*/*.pyc
 
-venv
+venv/
+.mypy_cache/
+.pytest_cache/

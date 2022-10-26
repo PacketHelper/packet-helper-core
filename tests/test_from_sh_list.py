@@ -1,23 +1,17 @@
-from scapy.layers.inet import IP, TCP
-from scapy.layers.l2 import Ether
-from scapy_helper import to_list, get_hex
-
+import pytest
 from packet_helper_core.utils.conversion import from_sh_list
+from scapy.packet import Packet
+from scapy_helper import get_hex, to_list
+
+from tests.utils.example_packets import SIMPLE_IP_IN_IP_PACKET
 
 
-class TestFromSHList:
-    def test_from_sh_list(self):
-        packet = Ether() / IP() / IP() / TCP()
-        packet_list = to_list(packet)
-        new_packet = from_sh_list(packet_list)
+@pytest.mark.parametrize(
+    "packet", (SIMPLE_IP_IN_IP_PACKET, SIMPLE_IP_IN_IP_PACKET / SIMPLE_IP_IN_IP_PACKET)
+)
+def test_from_sh_list(packet: Packet) -> None:
+    packet_list = to_list(packet)
+    new_packet = from_sh_list(packet_list)
 
-        assert get_hex(packet) == get_hex(new_packet)
-        assert packet_list == to_list(new_packet)
-
-    def test_from_sh_list_additional_packet(self):
-        packet = Ether() / IP() / IP() / TCP() / Ether() / IP() / IP() / TCP()
-        packet_list = to_list(packet)
-        new_packet = from_sh_list(packet_list)
-
-        assert get_hex(packet) == get_hex(new_packet)
-        assert packet_list == to_list(new_packet)
+    assert get_hex(packet) == get_hex(new_packet)
+    assert packet_list == to_list(new_packet)

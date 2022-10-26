@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class ChecksumStatus:
     chksum: str = ""
     chksum_calculated: str = ""
-    status: bool = None
+    status: bool | None = None
 
     def __call__(self, *args, **kwargs):
         def clean_chksum(element: str):

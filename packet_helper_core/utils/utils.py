@@ -1,4 +1,5 @@
 import pyshark
+from pyshark.packet.packet import Packet
 from scapy_helper import get_hex
 
 
@@ -21,32 +22,23 @@ def hex_str_operation(h_string, with_new_line: bool = False):
     return " ".join(tmp)
 
 
-def decode_hex(hex_str: str, use_json=False):
+def decode_hex(hex_str: str, use_json: bool = False) -> Packet:
     frame_bytes: bytes = bytes.fromhex(hex_str)
-    packet = None
-
-    # noinspection PyBroadException
-    try:
-        _custom_params = [
-            "-o",
-            "tcp.check_checksum:TRUE",
-            "-o",
-            "ip.check_checksum:TRUE",
-            "-o",
-            "stt.check_checksum:TRUE",
-            "-o",
-            "udp.check_checksum:TRUE",
-            "-o",
-            "wlan.check_checksum:TRUE",
-        ]
-        # only interested with the first packet
-        packet = pyshark.InMemCapture(custom_parameters=_custom_params)
-        packet = packet.parse_packet(frame_bytes)
-        packet.close()
-
-    except Exception:
-        pass
-    return packet
+    _custom_params = [
+        "-o",
+        "tcp.check_checksum:TRUE",
+        "-o",
+        "ip.check_checksum:TRUE",
+        "-o",
+        "stt.check_checksum:TRUE",
+        "-o",
+        "udp.check_checksum:TRUE",
+        "-o",
+        "wlan.check_checksum:TRUE",
+    ]
+    # only interested with the first packet
+    packet = pyshark.InMemCapture(custom_parameters=_custom_params)
+    return packet.parse_packet(frame_bytes)
 
 
 def better_scapy_summary(scapy_summary) -> list:
