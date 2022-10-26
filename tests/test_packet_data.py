@@ -1,6 +1,6 @@
 from packet_helper_core.packet_data import PacketData
 from packet_helper_core.utils.utils import decode_hex
-from scapy.layers.all import IP, TCP, Ether, IPv6  # type: ignore
+from scapy.layers.all import IP, TCP, Ether, IPv6  # noqa
 from scapy_helper import get_hex
 
 from tests.utils.example_packets import EXAMPLE_ETHER, EXAMPLE_ETHER_IP_IPV6_GRE_DATA

@@ -1,7 +1,9 @@
 import importlib
 
+from scapy.base_classes import BasePacket
 
-def from_sh_list(packet_list):
+
+def from_sh_list(packet_list) -> BasePacket:
     imported_all = importlib.import_module("scapy.all")
 
     def remove_none():

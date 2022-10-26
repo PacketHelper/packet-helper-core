@@ -1,4 +1,4 @@
-from scapy.all import IP, TCP, Ether  # type: ignore
+from scapy.all import IP, TCP, Ether  # noqa
 
 
 EXAMPLE_ETHER = "ff fd df af ff ff 00 00 00 00 00 12 08 00"

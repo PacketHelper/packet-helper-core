@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from scapy_helper import get_hex
 
+from packet_helper_core.models.scapy_data import ScapyData
 from packet_helper_core.packet_data import PacketData
 from packet_helper_core.utils.scapy_reader import scapy_reader
 
@@ -21,30 +22,32 @@ class PacketDataScapy:
         self.structure = self.__make_structure()
 
     def __make_structure(self):
-        temp_structure = []
+        temp_structure: list[ScapyData] = []
 
-        for e, h in enumerate(self.headers_scapy):
-            one_frame = self.headers_scapy[e].copy()
-            one_frame.remove_payload()
-            _dict = {
-                "name": h.name,
-                "bytes": str(h),
-                "hex": get_hex(h),
-                "hex_one": get_hex(one_frame),
-                "length": len(h),
-                "length_unit": "B",
-                "repr": f"{repr(h).split(' |')[0]}>",
-                "repr_full": repr(h),
-            }
+        for index, header in enumerate(self.headers_scapy):
+            scapy_header = self.headers_scapy[index].copy()
+            scapy_header.remove_payload()
+            scapy_data_dict: ScapyData = ScapyData(
+                **{
+                    "name": header.name,
+                    "bytes_record": str(header),
+                    "hex_record": get_hex(header),
+                    "hex_record_full": get_hex(scapy_header),
+                    "length": len(header),
+                    "length_unit": "B",
+                    "representation": f"{repr(header).split(' |')[0]}>",
+                    "representation_full": repr(header),
+                }
+            )
 
             # RAW elements on the end are added to the last package as data!
             try:
-                _dict["tshark_name"] = self.packet_data.body2[e][0]
-                _dict["tshark_raw_summary"] = self.packet_data.body2[e][1:]
+                scapy_data_dict.tshark_name = self.packet_data.body2[index][0]
+                scapy_data_dict.tshark_raw_summary = self.packet_data.body2[index][1:]
             except IndexError:
                 break
 
-            _dict["chksum_status"] = self.packet_data.chksum_list[e]
+            scapy_data_dict.chksum_status = self.packet_data.chksum_list[index]
 
-            temp_structure.append(_dict)
+            temp_structure.append(scapy_data_dict)
         return temp_structure

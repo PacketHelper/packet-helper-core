@@ -1,5 +1,4 @@
-from dataclasses import dataclass, asdict, field
-from typing import Any
+from dataclasses import dataclass, field
 
 from packet_helper_core.checksum_status import ChecksumStatus
 
@@ -7,7 +6,7 @@ from packet_helper_core.checksum_status import ChecksumStatus
 @dataclass
 class PacketData:
     raw: str
-    chksum_list: list[Any] = field(default_factory=list)
+    chksum_list: list[ChecksumStatus] = field(default_factory=list)
 
     _data_layer: list[str] = field(default_factory=list)
 
@@ -89,7 +88,7 @@ class PacketData:
         return temp_body_dict
 
     def chksum_verification(self, element) -> None:
-        chksum_status = ChecksumStatus()
+        chksum_status: ChecksumStatus = ChecksumStatus()
         for x in element:
             x = x.lower()
             if "header checksum" in x and "incorrect" in x:
@@ -102,8 +101,8 @@ class PacketData:
             if "calculated checksum" in x:
                 chksum_status.chksum_calculated = x.split(":")[1].split()[0]
         else:
-            chksum_status()
-            self.chksum_list.append(asdict(chksum_status))
+            chksum_status.verify()
+            self.chksum_list.append(chksum_status)
 
     def update_header(self):
         """Update header with data layer which is 'hidden' in the tshark output"""

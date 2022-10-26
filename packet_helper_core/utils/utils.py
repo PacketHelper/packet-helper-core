@@ -3,7 +3,7 @@ from pyshark.packet.packet import Packet
 from scapy_helper import get_hex
 
 
-def hex_str_operation(h_string, with_new_line: bool = False):
+def hex_str_operation(h_string, with_new_line: bool = False) -> str:
     z = ""
     tmp = []
     for e, x in enumerate(h_string.replace(" ", "")):
@@ -22,7 +22,7 @@ def hex_str_operation(h_string, with_new_line: bool = False):
     return " ".join(tmp)
 
 
-def decode_hex(hex_str: str, use_json: bool = False) -> Packet:
+def decode_hex(hex_str: str) -> Packet:
     frame_bytes: bytes = bytes.fromhex(hex_str)
     _custom_params = [
         "-o",
