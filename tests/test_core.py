@@ -1,8 +1,7 @@
-from scapy.all import IP, TCP, Ether  # noqa
-from scapy_helper import get_hex
-
-from packet_helper_core import PacketDataScapy, PacketData
+from packet_helper_core import PacketData, PacketDataScapy
 from packet_helper_core.core import Core
+from scapy.all import IP, TCP, Ether  # type: ignore
+from scapy_helper import get_hex
 
 
 class TestCore:
