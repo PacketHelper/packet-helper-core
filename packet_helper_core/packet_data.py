@@ -11,17 +11,15 @@ class PacketData:
     _data_layer: list[str] = field(default_factory=list)
 
     def __post_init__(self):
-        self.raw_array = self.raw.split("\n")
-        self.length = self.raw_array[0].replace(")", "").split()[2]
-        self.array = self.raw_array[1:]
+        self.array = self.raw.split("\n")[1:]
 
-        self.header = self.compose_header()
-        self.body = self.compose_body()
-        self.body2 = self.compose_body_list()
+        self.header = self.__compose_header()
+        self.body = self.__compose_body()
+        self.body2 = self.__compose_body_list()
 
-        self.update_header()
+        self.__update_header()
 
-    def compose_header(self):
+    def __compose_header(self):
         return [
             a.replace("Layer", "").replace(":", "").replace(" ", "")
             for a in self.array
@@ -35,7 +33,7 @@ class PacketData:
             return True
         return False
 
-    def compose_body(self) -> dict[str, list[str]]:
+    def __compose_body(self) -> dict[str, list[str]]:
         temp_body_dict: dict[str, list[str]] = {}
         actual_layer: str = ""
         for x in self.array:
@@ -51,7 +49,7 @@ class PacketData:
             temp_body_dict[actual_layer].append(x)
         return temp_body_dict
 
-    def compose_body_list(self) -> list[list[str]]:
+    def __compose_body_list(self) -> list[list[str]]:
         temp_body_dict = []
         line = []
         ckhsum_flag = False
@@ -82,12 +80,12 @@ class PacketData:
 
         if ckhsum_flag:
             for y in temp_body_dict:
-                self.chksum_verification(y)
+                self.__chksum_verification(y)
 
         temp_body_dict.append(data_found)
         return temp_body_dict
 
-    def chksum_verification(self, element) -> None:
+    def __chksum_verification(self, element) -> None:
         chksum_status: ChecksumStatus = ChecksumStatus()
         for x in element:
             x = x.lower()
@@ -104,7 +102,7 @@ class PacketData:
             chksum_status.verify()
             self.chksum_list.append(chksum_status)
 
-    def update_header(self):
+    def __update_header(self) -> None:
         """Update header with data layer which is 'hidden' in the tshark output"""
         if self._data_layer:
             self.header.append("RAW")
