@@ -2,7 +2,7 @@ import pytest
 from scapy.all import IP, TCP, Ether  # noqa
 from scapy_helper import get_hex
 
-from core import PacketHelper
+from core.packethelper import PacketHelper
 from core.decoders.scapy_data import ScapyData
 
 
