@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from pyshark.packet.packet import Packet
 
-from packet_helper_core.models.checksum_status import ChecksumStatus
+from core.models.checksum_status import ChecksumStatus
 
 
 @dataclass

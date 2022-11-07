@@ -1,8 +1,8 @@
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from packet_helper_core.models.checksum_status import ChecksumStatus
+from core.models.checksum_status import ChecksumStatus
 
 
 class ScapyResponse(BaseModel):
@@ -12,10 +12,10 @@ class ScapyResponse(BaseModel):
     hex_record_full: str  # hex_one
     length: int
     length_unit: Literal[
-        "B",
+        "B", "b"
     ]  # length_unit
     representation: str  # repr
     representation_full: str  # repr_full
     tshark_name: str = ""
-    tshark_raw_summary: str = ""
+    tshark_raw_summary: list[str] = Field(default_factory=list)
     chksum_status: ChecksumStatus | None = None

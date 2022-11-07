@@ -1,9 +1,9 @@
 import pytest
 
-from packet_helper_core.decoders.tshark_data import TSharkData
-from packet_helper_core.decoders.scapy_data import ScapyData
-from packet_helper_core.models.checksum_status import ChecksumStatus
-from packet_helper_core.packethelper import PacketHelper
+from core.decoders.tshark_data import TSharkData
+from core.decoders.scapy_data import ScapyData
+from core.models.checksum_status import ChecksumStatus
+from core.packethelper import PacketHelper
 from scapy.all import IP, TCP, Ether  # noqa
 from scapy_helper import get_hex
 

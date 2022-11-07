@@ -1,9 +1,9 @@
 from scapy.layers.all import IP, TCP, Ether, IPv6  # noqa
 from scapy_helper import get_hex
 
-from packet_helper_core import PacketHelper
-from packet_helper_core.decoders.decode_string import decode_string
-from packet_helper_core.decoders.tshark_data import TSharkData
+from core import PacketHelper
+from core.decoders.decode_string import decode_string
+from core.decoders.tshark_data import TSharkData
 from tests.utils.example_packets import EXAMPLE_ETHER, EXAMPLE_ETHER_IP_IPV6_GRE_DATA
 
 

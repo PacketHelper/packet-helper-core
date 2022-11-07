@@ -3,9 +3,9 @@ from dataclasses import dataclass
 from scapy.packet import Packet
 from scapy_helper import get_hex
 
-from packet_helper_core.decoders.tshark_data import TSharkData
-from packet_helper_core.models.scapy_response import ScapyResponse
-from packet_helper_core.utils.scapy_reader import scapy_reader
+from core.decoders.tshark_data import TSharkData
+from core.models.scapy_response import ScapyResponse
+from core.utils.scapy_reader import scapy_reader
 
 
 @dataclass

@@ -1,6 +1,6 @@
-from packet_helper_core.decoders.decode_string import decode_string
-from packet_helper_core.decoders.tshark_data import TSharkData
-from packet_helper_core.decoders.scapy_data import ScapyData
+from core.decoders.decode_string import decode_string
+from core.decoders.tshark_data import TSharkData
+from core.decoders.scapy_data import ScapyData
 
 
 class PacketHelper:

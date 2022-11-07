@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from scapy.base_classes import BasePacket
 
-from packet_helper_core.utils.conversion import from_sh_list
+from core.utils.conversion import from_sh_list
 from scapy.packet import Packet
 from scapy_helper import get_hex, to_list
 
