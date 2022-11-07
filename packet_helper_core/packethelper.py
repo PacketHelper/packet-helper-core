@@ -14,11 +14,11 @@ class PacketHelper:
 
     def decode(self, hex_string: str, extend_with_scapy: bool = True) -> None:
         self.hex_string = hex_string.replace(" ", "")
-        _decoded_string = decode_string(hex_string)
-        self.__decoded_by_tshark = TSharkData(raw=str(_decoded_string))
+        decoded_string = decode_string(self.hex_string)
+        self.__decoded_by_tshark = TSharkData(decoded_packet=decoded_string)
         if extend_with_scapy:
             self.__decoded_by_scapy = ScapyData(
-                raw=hex_string, packet_data=self.__decoded_by_tshark
+                raw=self.hex_string, packet_data=self.__decoded_by_tshark
             )
 
     @property

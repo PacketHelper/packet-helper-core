@@ -51,10 +51,7 @@ def test_negative_core_chksum_verification_with_wrong_chksum(
 ):
     ph = PacketHelper()
     ph.decode(packet)
-    assert (
-            ph.tshark_data.chksum_list[position_to_check].chksum
-            == expected_chksum_value
-    )
+    assert ph.tshark_data.chksum_list[position_to_check].chksum == expected_chksum_value
 
 
 def test_ethernet_ip_udp_dns():

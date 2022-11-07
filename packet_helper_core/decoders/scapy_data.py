@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from scapy_helper import get_hex
 
 from packet_helper_core.decoders.tshark_data import TSharkData
+from packet_helper_core.models.scapy_response import ScapyResponse
 from packet_helper_core.utils.scapy_reader import scapy_reader
 
 
@@ -21,12 +22,12 @@ class ScapyData:
         self.structure = self.__make_structure()
 
     def __make_structure(self):
-        temp_structure: list[ScapyData] = []
+        temp_structure: list[ScapyResponse] = []
 
         for index, header in enumerate(self.headers_scapy):
             scapy_header = self.headers_scapy[index].copy()
             scapy_header.remove_payload()
-            scapy_data_dict: ScapyData = ScapyData(
+            scapy_data_dict: ScapyResponse = ScapyResponse(
                 **{
                     "name": header.name,
                     "bytes_record": str(header),

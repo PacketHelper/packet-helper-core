@@ -1,28 +1,30 @@
 from dataclasses import dataclass, field
 
+from pyshark.packet.packet import Packet
+
 from packet_helper_core.models.checksum_status import ChecksumStatus
 
 
 @dataclass
 class TSharkData:
-    raw: str
+    decoded_packet: Packet
     chksum_list: list[ChecksumStatus] = field(default_factory=list)
 
     _data_layer: list[str] = field(default_factory=list)
 
     def __post_init__(self):
-        self.array = self.raw.split("\n")[1:]
+        self.__pkt_information_array = str(self.decoded_packet).split("\n")[1:]
 
-        self.header = self.__compose_header()
-        self.body = self.__compose_body()
-        self.body2 = self.__compose_body_list()
+        self.header: list[str] = self.__compose_header()
+        self.body: dict[str, list[str]] = self.__compose_body()
+        self.body2: list[list[str]] = self.__compose_body_list()
 
         self.__update_header()
 
     def __compose_header(self) -> list[str]:
         return [
             a.replace("Layer", "").replace(":", "").replace(" ", "")
-            for a in self.array
+            for a in self.__pkt_information_array
             if a.startswith("Layer")
         ]
 
@@ -36,7 +38,7 @@ class TSharkData:
     def __compose_body(self) -> dict[str, list[str]]:
         temp_body_dict: dict[str, list[str]] = {}
         actual_layer: str = ""
-        for x in self.array:
+        for x in self.__pkt_information_array:
             if x.startswith("Layer"):
                 actual_layer = x.replace(":", "").split()[1]
                 temp_body_dict[actual_layer] = []
@@ -56,7 +58,7 @@ class TSharkData:
         data_found: list[str] = [
             "RAW",
         ]
-        for arr in self.array:
+        for arr in self.__pkt_information_array:
             arr = arr.strip()
             if arr == "" and line:
                 temp_body_dict.append(line)

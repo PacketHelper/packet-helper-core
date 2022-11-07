@@ -1,22 +1,20 @@
 from scapy.layers.all import IP, TCP, Ether, IPv6  # noqa
 from scapy_helper import get_hex
 
-from packet_helper_core import PacketHelper, TSharkData
+from packet_helper_core import PacketHelper
 from packet_helper_core.decoders.decode_string import decode_string
+from packet_helper_core.decoders.tshark_data import TSharkData
 from tests.utils.example_packets import EXAMPLE_ETHER, EXAMPLE_ETHER_IP_IPV6_GRE_DATA
 
 
 def test_packet_data():
-    packet = decode_string(EXAMPLE_ETHER)
-    assert packet.__getitem__("eth"), "Layer Ether should be available in decoded hex"
+    decoded_pkt = decode_string(EXAMPLE_ETHER)
+    assert decoded_pkt.__getitem__(
+        "eth"
+    ), "Layer Ether should be available in decoded hex"
 
-    pd = TSharkData(raw=str(packet))
-    assert "ETH" in pd.header, "Ether header should be found at packet"
-
-
-def test_decode():
-    packet = PacketHelper(hex_string=EXAMPLE_ETHER).decode()
-    print(packet)
+    pd = TSharkData(decoded_packet=decoded_pkt)
+    assert "ETH" in pd.header, "Ether header should be found at decoded_pkt"
 
 
 def test_decode_hex__data_should_be_present_after_gre_packet():
@@ -25,8 +23,8 @@ def test_decode_hex__data_should_be_present_after_gre_packet():
         "e672031313233343435393832373334393832373334323334"
     )
 
-    packet = decode_string(EXAMPLE_ETHER_IP_IPV6_GRE_DATA)
-    pd = TSharkData(raw=str(packet))
+    decoded_pkt = decode_string(EXAMPLE_ETHER_IP_IPV6_GRE_DATA)
+    pd = TSharkData(decoded_packet=decoded_pkt)
     packet_raw_data = pd.body.get("RAW", [])
     assert packet_raw_data, "RAW block should be available"
     extracted_data_from_raw = packet_raw_data[0].split()[-1]
