@@ -3,7 +3,7 @@ import pytest
 from core.decoders.tshark_data import TSharkData
 from core.decoders.scapy_data import ScapyData
 from core.models.checksum_status import ChecksumStatus
-from core.packethelper import PacketHelper
+from core.packet_helper import PacketHelper
 from scapy.all import IP, TCP, Ether  # noqa
 from scapy_helper import get_hex
 

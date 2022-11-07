@@ -11,12 +11,6 @@ class HexSummary(BaseModel):
     hexdump: str
 
 
-class HexDecodedHexChksumStatus(BaseModel):
-    chksum: str
-    chksum_calculated: str
-    status: bool | None
-
-
 class DecodedHexResponse(BaseModel):
     hex: str
     summary: HexSummary
