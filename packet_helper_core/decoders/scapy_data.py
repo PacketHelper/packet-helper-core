@@ -2,15 +2,14 @@ from dataclasses import dataclass
 
 from scapy_helper import get_hex
 
-from packet_helper_core.models.scapy_data import ScapyData
-from packet_helper_core.packet_data import PacketData
+from packet_helper_core.decoders.tshark_data import TSharkData
 from packet_helper_core.utils.scapy_reader import scapy_reader
 
 
 @dataclass
-class PacketDataScapy:
+class ScapyData:
     raw: str
-    packet_data: PacketData
+    packet_data: TSharkData
 
     def __post_init__(self):
         self.header = [x.replace("\r", "") for x in self.packet_data.header]

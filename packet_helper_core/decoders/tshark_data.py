@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from packet_helper_core.checksum_status import ChecksumStatus
+from packet_helper_core.models.checksum_status import ChecksumStatus
 
 
 @dataclass
-class PacketData:
+class TSharkData:
     raw: str
     chksum_list: list[ChecksumStatus] = field(default_factory=list)
 
@@ -19,7 +19,7 @@ class PacketData:
 
         self.__update_header()
 
-    def __compose_header(self):
+    def __compose_header(self) -> list[str]:
         return [
             a.replace("Layer", "").replace(":", "").replace(" ", "")
             for a in self.array
