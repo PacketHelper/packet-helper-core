@@ -7,7 +7,7 @@ from core.utils.conversion import from_sh_list
 from scapy.packet import Packet
 from scapy_helper import get_hex, to_list
 
-from tests.utils.example_packets import SIMPLE_IP_IN_IP_PACKET
+from tests.unit.core.utils.example_packets import SIMPLE_IP_IN_IP_PACKET
 
 
 @pytest.mark.parametrize(

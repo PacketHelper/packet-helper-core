@@ -11,9 +11,7 @@ class ScapyResponse(BaseModel):
     hex_record: str  # hex
     hex_record_full: str  # hex_one
     length: int
-    length_unit: Literal[
-        "B", "b"
-    ]  # length_unit
+    length_unit: Literal["B", "b"]  # length_unit
     representation: str  # repr
     representation_full: str  # repr_full
     tshark_name: str = ""
