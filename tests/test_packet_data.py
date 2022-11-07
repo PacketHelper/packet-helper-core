@@ -1,17 +1,20 @@
-from packet_helper_core.packet_data import PacketData
-from packet_helper_core.utils.utils import decode_hex
-from scapy.layers.all import IP, TCP, Ether, IPv6  # type: ignore
+from scapy.layers.all import IP, TCP, Ether, IPv6  # noqa
 from scapy_helper import get_hex
 
+from packet_helper_core import PacketHelper
+from packet_helper_core.decoders.decode_string import decode_string
+from packet_helper_core.decoders.tshark_data import TSharkData
 from tests.utils.example_packets import EXAMPLE_ETHER, EXAMPLE_ETHER_IP_IPV6_GRE_DATA
 
 
 def test_packet_data():
-    packet = decode_hex(EXAMPLE_ETHER)
-    assert packet.__getitem__("eth"), "Layer Ether should be available in decoded hex"
+    decoded_pkt = decode_string(EXAMPLE_ETHER)
+    assert decoded_pkt.__getitem__(
+        "eth"
+    ), "Layer Ether should be available in decoded hex"
 
-    pd = PacketData(raw=str(packet))
-    assert "ETH" in pd.header, "Ether header should be found at packet"
+    pd = TSharkData(decoded_packet=decoded_pkt)
+    assert "ETH" in pd.header, "Ether headers should be found at decoded_pkt"
 
 
 def test_decode_hex__data_should_be_present_after_gre_packet():
@@ -20,8 +23,8 @@ def test_decode_hex__data_should_be_present_after_gre_packet():
         "e672031313233343435393832373334393832373334323334"
     )
 
-    packet = decode_hex(EXAMPLE_ETHER_IP_IPV6_GRE_DATA)
-    pd = PacketData(raw=str(packet))
+    decoded_pkt = decode_string(EXAMPLE_ETHER_IP_IPV6_GRE_DATA)
+    pd = TSharkData(decoded_packet=decoded_pkt)
     packet_raw_data = pd.body.get("RAW", [])
     assert packet_raw_data, "RAW block should be available"
     extracted_data_from_raw = packet_raw_data[0].split()[-1]
@@ -33,7 +36,7 @@ def test_decode_hex__data_should_be_present_after_gre_packet():
 
 def test_custom_packet_data():
     frame = Ether() / IP() / IPv6() / TCP()
-    packet = decode_hex(get_hex(frame))
+    packet = decode_string(get_hex(frame))
     list_of_expected_packets = ("ETH", "IP", "IPV6", "TCP")
     list_of_layers_from_packet = [x.layer_name.upper() for x in packet.layers]
     for expected_packet in list_of_expected_packets:

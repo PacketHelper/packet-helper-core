@@ -16,7 +16,7 @@ with open(requirements_txt, "r", encoding="utf-8") as fin:
 
 setup(
     name="packet_helper_core",
-    description="Engine to decode raw string hex into packets",
+    description="Engine to decode decoded_packet string hex into packets",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Nex Sabre",
