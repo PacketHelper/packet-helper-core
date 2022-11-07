@@ -25,3 +25,8 @@ build:
 	@echo "Building..."
 	python3 setup.py sdist bdist_wheel --universal
 	@echo "Building... Done"
+
+.PHONY: test
+test:
+	mkdir -p static && touch static/index.html
+	PYTHONPATH=${PWD} pytest tests/integration
