@@ -91,7 +91,7 @@ class TSharkData:
         chksum_status: ChecksumStatus = ChecksumStatus()
         for x in element:
             x = x.lower()
-            if "header checksum" in x and "incorrect" in x:
+            if "headers checksum" in x and "incorrect" in x:
                 chksum_status.chksum = x.split(":")[1].split()[0]
                 continue
             if "bad checksum" in x and not chksum_status.chksum:
@@ -105,6 +105,6 @@ class TSharkData:
             self.chksum_list.append(chksum_status)
 
     def __update_header(self) -> None:
-        """Update header with data layer which is 'hidden' in the tshark output"""
+        """Update headers with data layer which is 'hidden' in the tshark output"""
         if self._data_layer:
             self.header.append("RAW")

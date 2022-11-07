@@ -20,7 +20,7 @@ def test_core_post_init():
     assert isinstance(ph.hex_string, str), "Should be String"
     assert isinstance(ph.scapy_data, ScapyData), "Should be Scapy Data"
     assert isinstance(ph.tshark_data, TSharkData), "Should be TShark Data"
-    assert ph.scapy_data.header == expected_headers, "Should be properly decoded"
+    assert ph.scapy_data.headers == expected_headers, "Should be properly decoded"
     assert ph.tshark_data.header == expected_headers, "Should be properly decoded"
 
 

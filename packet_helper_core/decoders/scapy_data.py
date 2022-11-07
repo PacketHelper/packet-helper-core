@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from scapy.packet import Packet
 from scapy_helper import get_hex
 
 from packet_helper_core.decoders.tshark_data import TSharkData
@@ -13,20 +14,24 @@ class ScapyData:
     packet_data: TSharkData
 
     def __post_init__(self):
-        self.header = [x.replace("\r", "") for x in self.packet_data.header]
-        self.headers_scapy = scapy_reader(self.raw)
+        self.headers: list[str] = [x.replace("\r", "") for x in self.packet_data.header]
+        self.scapy_headers: list[Packet] = scapy_reader(self.raw)
 
-        self.headers_full = [repr(x) for x in self.headers_scapy]
-        self.headers_single = [f"{x.split(' |')[0]}>" for x in self.headers_full]
+        self.full_scapy_representation_headers: list[str] = [
+            repr(x) for x in self.scapy_headers
+        ]
+        self.single_scapy_representation_headers = [
+            f"{x.split(' |')[0]}>" for x in self.full_scapy_representation_headers
+        ]
 
-        self.structure = self.__make_structure()
+        self.packet_structure = self.__make_structure()
 
-    def __make_structure(self):
-        temp_structure: list[ScapyResponse] = []
+    def __make_structure(self) -> list[ScapyResponse]:
+        scapy_responses: list[ScapyResponse] = []
 
-        for index, header in enumerate(self.headers_scapy):
-            scapy_header = self.headers_scapy[index].copy()
-            scapy_header.remove_payload()
+        for index, header in enumerate(self.scapy_headers):
+            scapy_header = self.scapy_headers[index].copy()
+            scapy_header.remove_payload()  # payload is not necessary for our usage in this case
             scapy_data_dict: ScapyResponse = ScapyResponse(
                 **{
                     "name": header.name,
@@ -49,5 +54,5 @@ class ScapyData:
 
             scapy_data_dict.chksum_status = self.packet_data.chksum_list[index]
 
-            temp_structure.append(scapy_data_dict)
-        return temp_structure
+            scapy_responses.append(scapy_data_dict)
+        return scapy_responses

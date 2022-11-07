@@ -14,7 +14,7 @@ def test_packet_data():
     ), "Layer Ether should be available in decoded hex"
 
     pd = TSharkData(decoded_packet=decoded_pkt)
-    assert "ETH" in pd.header, "Ether header should be found at decoded_pkt"
+    assert "ETH" in pd.header, "Ether headers should be found at decoded_pkt"
 
 
 def test_decode_hex__data_should_be_present_after_gre_packet():
