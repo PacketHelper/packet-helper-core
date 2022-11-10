@@ -17,7 +17,7 @@ sudo apt-get -y install wireshark
 sudo apt-get install -y --allow-change-held-packages --force-yes tshark
 ```
 
-Recommended *Python 3.8* (as minimal). 
+Recommended *Python 3.11* (as minimal). 
 
 To verify that all works, try to run test using `pytest` (in root directory of this package):
 

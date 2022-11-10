@@ -1,31 +1,30 @@
-from dataclasses import dataclass, asdict, field
-from typing import Any
+from dataclasses import dataclass, field
 
-from packet_helper_core.checksum_status import ChecksumStatus
+from pyshark.packet.packet import Packet
+
+from core.models.checksum_status import ChecksumStatus
 
 
 @dataclass
-class PacketData:
-    raw: str
-    chksum_list: list[Any] = field(default_factory=list)
+class TSharkData:
+    decoded_packet: Packet
+    chksum_list: list[ChecksumStatus] = field(default_factory=list)
 
     _data_layer: list[str] = field(default_factory=list)
 
     def __post_init__(self):
-        self.raw_array = self.raw.split("\n")
-        self.length = self.raw_array[0].replace(")", "").split()[2]
-        self.array = self.raw_array[1:]
+        self.__pkt_information_array = str(self.decoded_packet).split("\n")[1:]
 
-        self.header = self.compose_header()
-        self.body = self.compose_body()
-        self.body2 = self.compose_body_list()
+        self.header: list[str] = self.__compose_header()
+        self.body: dict[str, list[str]] = self.__compose_body()
+        self.body2: list[list[str]] = self.__compose_body_list()
 
-        self.update_header()
+        self.__update_header()
 
-    def compose_header(self):
+    def __compose_header(self) -> list[str]:
         return [
             a.replace("Layer", "").replace(":", "").replace(" ", "")
-            for a in self.array
+            for a in self.__pkt_information_array
             if a.startswith("Layer")
         ]
 
@@ -36,10 +35,10 @@ class PacketData:
             return True
         return False
 
-    def compose_body(self) -> dict[str, list[str]]:
+    def __compose_body(self) -> dict[str, list[str]]:
         temp_body_dict: dict[str, list[str]] = {}
         actual_layer: str = ""
-        for x in self.array:
+        for x in self.__pkt_information_array:
             if x.startswith("Layer"):
                 actual_layer = x.replace(":", "").split()[1]
                 temp_body_dict[actual_layer] = []
@@ -52,14 +51,14 @@ class PacketData:
             temp_body_dict[actual_layer].append(x)
         return temp_body_dict
 
-    def compose_body_list(self) -> list[list[str]]:
+    def __compose_body_list(self) -> list[list[str]]:
         temp_body_dict = []
         line = []
         ckhsum_flag = False
         data_found: list[str] = [
             "RAW",
         ]
-        for arr in self.array:
+        for arr in self.__pkt_information_array:
             arr = arr.strip()
             if arr == "" and line:
                 temp_body_dict.append(line)
@@ -83,16 +82,16 @@ class PacketData:
 
         if ckhsum_flag:
             for y in temp_body_dict:
-                self.chksum_verification(y)
+                self.__chksum_verification(y)
 
         temp_body_dict.append(data_found)
         return temp_body_dict
 
-    def chksum_verification(self, element) -> None:
-        chksum_status = ChecksumStatus()
+    def __chksum_verification(self, element) -> None:
+        chksum_status: ChecksumStatus = ChecksumStatus()
         for x in element:
             x = x.lower()
-            if "header checksum" in x and "incorrect" in x:
+            if "headers checksum" in x and "incorrect" in x:
                 chksum_status.chksum = x.split(":")[1].split()[0]
                 continue
             if "bad checksum" in x and not chksum_status.chksum:
@@ -102,10 +101,10 @@ class PacketData:
             if "calculated checksum" in x:
                 chksum_status.chksum_calculated = x.split(":")[1].split()[0]
         else:
-            chksum_status()
-            self.chksum_list.append(asdict(chksum_status))
+            chksum_status.verify()
+            self.chksum_list.append(chksum_status)
 
-    def update_header(self):
-        """Update header with data layer which is 'hidden' in the tshark output"""
+    def __update_header(self) -> None:
+        """Update headers with data layer which is 'hidden' in the tshark output"""
         if self._data_layer:
             self.header.append("RAW")
