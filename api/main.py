@@ -29,9 +29,13 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # rest api
+# /api/*
 router_api_config = {"prefix": "/api", "tags": ["api"]}
-for api_router in (api_create, api_hex, api_info, api_packets, version):
+for api_router in (api_create, api_hex, api_info, api_packets):
     app.include_router(api_router, **router_api_config)
+
+# /*
+app.include_router(version)
 
 templates = Jinja2Templates(directory="static")
 
